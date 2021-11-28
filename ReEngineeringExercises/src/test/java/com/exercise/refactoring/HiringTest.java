@@ -1,30 +1,29 @@
 package com.exercise.refactoring;
 
-import junit.framework.TestCase;
-import java.util.*;
-import java.io.IOException;
-
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
+import java.io.IOException;
+
+/**
+ * Unit test for simple App.
+ */
 public class HiringTest extends TestCase {
-	 /**
+    /**
      * Create the test case
      *
      * @param testName name of the test case
      */
-    public HiringTest ( String testName )
-    {
-        super( testName );
+    public HiringTest(String testName) {
+        super(testName);
     }
 
     /**
      * @return the suite of tests being tested
      */
-    public static Test suite()
-    {
-        return new TestSuite( HiringTest.class );
+    public static Test suite() {
+        return new TestSuite(HiringTest.class);
     }
 
     /**
@@ -32,10 +31,10 @@ public class HiringTest extends TestCase {
      */
     public void testWhereGivenCompany() {
         try {
-            Map<String, String> options = new HashMap<String, String> ();
-            options.put("company_name", "Facebook");
-            assertEquals(FundingRaised.where(options).size(), 7);
-        } catch(IOException e) {
+            Row filter = new Row();
+            filter.company_name= "Facebook";
+            assertEquals(FundingRaisedRefactored.where(filter).size(), 7);
+        } catch (IOException e) {
             System.out.print(e.getMessage());
             System.out.print("error");
         }
@@ -43,10 +42,10 @@ public class HiringTest extends TestCase {
 
     public void testWhereGivenCity() {
         try {
-            Map<String, String> options = new HashMap<String, String> ();
-            options.put("city", "Tempe");
-            assertEquals(FundingRaised.where(options).size(), 3);
-        } catch(IOException e) {
+            Row filter = new Row();
+            filter.city= "Tempe";
+            assertEquals(FundingRaisedRefactored.where(filter).size(), 3);
+        } catch (IOException e) {
             System.out.print(e.getMessage());
             System.out.print("error");
         }
@@ -54,10 +53,10 @@ public class HiringTest extends TestCase {
 
     public void testWhereGivenState() {
         try {
-            Map<String, String> options = new HashMap<String, String> ();
-            options.put("state", "CA");
-            assertEquals(FundingRaised.where(options).size(), 873);
-        } catch(IOException e) {
+            Row filter = new Row();
+            filter.state= "CA";
+            assertEquals(FundingRaisedRefactored.where(filter).size(), 873);
+        } catch (IOException e) {
             System.out.print(e.getMessage());
             System.out.print("error");
         }
@@ -65,10 +64,10 @@ public class HiringTest extends TestCase {
 
     public void testWhereGivenRound() {
         try {
-            Map<String, String> options = new HashMap<String, String> ();
-            options.put("round", "a");
-            assertEquals(FundingRaised.where(options).size(), 582);
-        } catch(IOException e) {
+            Row filter = new Row();
+            filter.round= "a";
+            assertEquals(FundingRaisedRefactored.where(filter).size(), 582);
+        } catch (IOException e) {
             System.out.print(e.getMessage());
             System.out.print("error");
         }
@@ -76,11 +75,11 @@ public class HiringTest extends TestCase {
 
     public void testMultipleOptions() {
         try {
-            Map<String, String> options = new HashMap<String, String> ();
-            options.put("round", "a");
-            options.put("company_name", "Facebook");
-            assertEquals(FundingRaised.where(options).size(), 1);
-        } catch(IOException e) {
+            Row filter = new Row();
+            filter.round= "a";
+            filter.company_name= "Facebook";
+            assertEquals(FundingRaisedRefactored.where(filter).size(), 1);
+        } catch (IOException e) {
             System.out.print(e.getMessage());
             System.out.print("error");
         }
@@ -88,10 +87,10 @@ public class HiringTest extends TestCase {
 
     public void testWhereNotExists() {
         try {
-            Map<String, String> options = new HashMap<String, String> ();
-            options.put("company_name", "NotFacebook");
-            assertEquals(FundingRaised.where(options).size(), 0);
-        } catch(IOException e) {
+            Row filter = new Row();
+            filter.company_name= "NotFacebook";
+            assertEquals(FundingRaisedRefactored.where(filter).size(), 0);
+        } catch (IOException e) {
             System.out.print(e.getMessage());
             System.out.print("error");
         }
@@ -99,20 +98,20 @@ public class HiringTest extends TestCase {
 
     public void testWhereCorrectKeys() {
         try {
-            Map<String, String> options = new HashMap<String, String> ();
-            options.put("company_name", "Facebook");
-            Map<String, String> row = FundingRaised.where(options).get(0);
+            Row filter = new Row();
+            filter.company_name= "Facebook";
+            Row row = FundingRaisedRefactored.where(filter).get(0);
 
-            assertEquals(row.get("permalink"), "facebook");
-            assertEquals(row.get("company_name"), "Facebook");
-            assertEquals(row.get("number_employees"), "450");
-            assertEquals(row.get("category"), "web");
-            assertEquals(row.get("city"), "Palo Alto");
-            assertEquals(row.get("state"), "CA");
-            assertEquals(row.get("funded_date"), "1-Sep-04");
-            assertEquals(row.get("raised_amount"), "500000");
-            assertEquals(row.get("round"), "angel");
-        } catch(IOException e) {
+            assertEquals(row.permalink, "facebook");
+            assertEquals(row.company_name, "Facebook");
+            assertEquals(row.number_employees, "450");
+            assertEquals(row.category, "web");
+            assertEquals(row.city, "Palo Alto");
+            assertEquals(row.state, "CA");
+            assertEquals(row.funded_date, "1-Sep-04");
+            assertEquals(row.raised_amount, "500000");
+            assertEquals(row.round, "angel");
+        } catch (IOException e) {
             System.out.print(e.getMessage());
             System.out.print("error");
         }
@@ -120,23 +119,23 @@ public class HiringTest extends TestCase {
 
     public void testFindByGivenCompanyName() {
         try {
-            Map<String, String> options = new HashMap<String, String> ();
-            options.put("company_name", "Facebook");
-            Map<String, String> row = FundingRaised.findBy(options);
+            Row filter = new Row();
+            filter.company_name= "Facebook";
+            Row row = FundingRaisedRefactored.findBy(filter);
 
-            assertEquals(row.get("permalink"), "facebook");
-            assertEquals(row.get("company_name"), "Facebook");
-            assertEquals(row.get("number_employees"), "450");
-            assertEquals(row.get("category"), "web");
-            assertEquals(row.get("city"), "Palo Alto");
-            assertEquals(row.get("state"), "CA");
-            assertEquals(row.get("funded_date"), "1-Sep-04");
-            assertEquals(row.get("raised_amount"), "500000");
-            assertEquals(row.get("round"), "angel");
-        } catch(IOException e) {
+            assertEquals(row.permalink, "facebook");
+            assertEquals(row.company_name, "Facebook");
+            assertEquals(row.number_employees, "450");
+            assertEquals(row.category, "web");
+            assertEquals(row.city, "Palo Alto");
+            assertEquals(row.state, "CA");
+            assertEquals(row.funded_date, "1-Sep-04");
+            assertEquals(row.raised_amount, "500000");
+            assertEquals(row.round, "angel");
+        } catch (IOException e) {
             System.out.print(e.getMessage());
             System.out.print("error");
-        } catch(NoSuchEntryException e) {
+        } catch (NoSuchEntryException e) {
             System.out.print(e.getMessage());
             System.out.print("error");
         }
@@ -144,23 +143,23 @@ public class HiringTest extends TestCase {
 
     public void testFindByGivenState() {
         try {
-            Map<String, String> options = new HashMap<String, String> ();
-            options.put("state", "CA");
-            Map<String, String> row = FundingRaised.findBy(options);
+            Row filter = new Row();
+            filter.state = "CA";
+            Row row = FundingRaisedRefactored.findBy(filter);
 
-            assertEquals(row.get("permalink"), "digg");
-            assertEquals(row.get("company_name"), "Digg");
-            assertEquals(row.get("number_employees"), "60");
-            assertEquals(row.get("category"), "web");
-            assertEquals(row.get("city"), "San Francisco");
-            assertEquals(row.get("state"), "CA");
-            assertEquals(row.get("funded_date"), "1-Dec-06");
-            assertEquals(row.get("raised_amount"), "8500000");
-            assertEquals(row.get("round"), "b");
-        } catch(IOException e) {
+            assertEquals(row.permalink, "digg");
+            assertEquals(row.company_name, "Digg");
+            assertEquals(row.number_employees, "60");
+            assertEquals(row.category, "web");
+            assertEquals(row.city, "San Francisco");
+            assertEquals(row.state, "CA");
+            assertEquals(row.funded_date, "1-Dec-06");
+            assertEquals(row.raised_amount, "8500000");
+            assertEquals(row.round, "b");
+        } catch (IOException e) {
             System.out.print(e.getMessage());
             System.out.print("error");
-        } catch(NoSuchEntryException e) {
+        } catch (NoSuchEntryException e) {
             System.out.print(e.getMessage());
             System.out.print("error");
         }
@@ -168,24 +167,24 @@ public class HiringTest extends TestCase {
 
     public void testFindByMultipleOptions() {
         try {
-            Map<String, String> options = new HashMap<String, String> ();
-            options.put("company_name", "Facebook");
-            options.put("round", "c");
-            Map<String, String> row = FundingRaised.findBy(options);
+            Row filter = new Row();
+            filter.company_name = "Facebook";
+            filter.round = "c";
+            Row row = FundingRaisedRefactored.findBy(filter);
 
-            assertEquals(row.get("permalink"), "facebook");
-            assertEquals(row.get("company_name"), "Facebook");
-            assertEquals(row.get("number_employees"), "450");
-            assertEquals(row.get("category"), "web");
-            assertEquals(row.get("city"), "Palo Alto");
-            assertEquals(row.get("state"), "CA");
-            assertEquals(row.get("funded_date"), "1-Oct-07");
-            assertEquals(row.get("raised_amount"), "300000000");
-            assertEquals(row.get("round"), "c");
-        } catch(IOException e) {
+            assertEquals(row.permalink, "facebook");
+            assertEquals(row.company_name, "Facebook");
+            assertEquals(row.number_employees, "450");
+            assertEquals(row.category, "web");
+            assertEquals(row.city, "Palo Alto");
+            assertEquals(row.state, "CA");
+            assertEquals(row.funded_date, "1-Oct-07");
+            assertEquals(row.raised_amount, "300000000");
+            assertEquals(row.round, "c");
+        } catch (IOException e) {
             System.out.print(e.getMessage());
             System.out.print("error");
-        } catch(NoSuchEntryException e) {
+        } catch (NoSuchEntryException e) {
             System.out.print(e.getMessage());
             System.out.print("error");
         }
@@ -193,15 +192,15 @@ public class HiringTest extends TestCase {
 
     public void testFindByNotExists() {
         try {
-            Map<String, String> options = new HashMap<String, String> ();
-            options.put("company_name", "NotFacebook");
-            options.put("round", "c");
-            Map<String, String> row = FundingRaised.findBy(options);
+            Row filter = new Row();
+            filter.company_name= "NotFacebook";
+            filter.round= "c";
+            Row row = FundingRaisedRefactored.findBy(filter);
             fail("findBy should throw exception");
-        } catch(IOException e) {
+        } catch (IOException e) {
             System.out.print(e.getMessage());
             System.out.print("error");
-        } catch(NoSuchEntryException e) {
+        } catch (NoSuchEntryException e) {
         }
     }
 }
